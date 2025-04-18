@@ -3,6 +3,7 @@ package com.shobhit.Backend.controller;
 import com.shobhit.Backend.entity.User;
 import com.shobhit.Backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,5 +24,6 @@ public class UserController {
     @PostMapping("/login")
     public String login(@RequestBody User user){
         return userService.login(user);
+
     }
 }
