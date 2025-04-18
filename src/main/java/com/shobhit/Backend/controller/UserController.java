@@ -1,5 +1,7 @@
 package com.shobhit.Backend.controller;
 
+import com.shobhit.Backend.dto.UserRequestDTO;
+import com.shobhit.Backend.dto.UserResponseDTO;
 import com.shobhit.Backend.entity.User;
 import com.shobhit.Backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,7 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/register")
-    public User register(@RequestBody User user){
+    public UserResponseDTO register(@RequestBody UserRequestDTO user){
         return userService.register(user);
     }
 
