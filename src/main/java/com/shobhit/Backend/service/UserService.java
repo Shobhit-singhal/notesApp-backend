@@ -13,4 +13,8 @@ public class UserService {
     public User register(User user) {
         return user;
     }
+
+    public String login(User user) {
+        return "Success";
+    }
 }
