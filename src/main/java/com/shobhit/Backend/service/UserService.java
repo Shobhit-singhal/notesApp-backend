@@ -42,4 +42,9 @@ public class UserService {
         String token= jwtService.generateToken(user.getUsername());
         return LoginResponseDto.builder().token(token).build();
     }
+
+    public UserResponseDTO getUserInfo(String name) {
+        User user=userRepo.findByUsername(name).orElseThrow(()->new UsernameNotFoundException("Username not found"));
+        return UserResponseDTO.builder().username(user.getUsername()).gender(user.getGender()).build();
+    }
 }

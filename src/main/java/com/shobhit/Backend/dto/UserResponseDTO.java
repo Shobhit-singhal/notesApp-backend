@@ -15,5 +15,4 @@ import java.util.List;
 public class UserResponseDTO {
     private String username;
     private String gender;
-    private List<NoteResponseDTO> notes;
 }

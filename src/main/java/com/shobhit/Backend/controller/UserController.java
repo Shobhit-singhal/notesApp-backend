@@ -1,32 +1,26 @@
 package com.shobhit.Backend.controller;
 
-import com.shobhit.Backend.dto.LoginResponseDto;
-import com.shobhit.Backend.dto.UserLoginReqDTO;
-import com.shobhit.Backend.dto.UserRequestDTO;
 import com.shobhit.Backend.dto.UserResponseDTO;
 import com.shobhit.Backend.entity.User;
+import com.shobhit.Backend.repository.UserRepo;
 import com.shobhit.Backend.service.UserService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/public")
+@RequestMapping("/user")
 
 public class UserController {
-
     @Autowired
-    UserService userService;
-
-    @PostMapping("/register")
-    public UserResponseDTO register(@Valid @RequestBody UserRequestDTO user){
-        return userService.register(user);
-    }
-
-    @PostMapping("/login")
-    public LoginResponseDto login(@Valid @RequestBody UserLoginReqDTO user){
-        return userService.login(user);
-
+    private UserService userService;
+    @GetMapping("/info")
+    public UserResponseDTO getUserInfo(Authentication authentication){
+        System.out.println("hi");
+        return userService.getUserInfo(authentication.getName());
     }
 }
