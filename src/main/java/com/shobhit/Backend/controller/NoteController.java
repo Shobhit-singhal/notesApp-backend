@@ -40,4 +40,10 @@ public class NoteController {
     public NoteResponseDTO getById(Authentication authentication,@PathVariable long id) throws AccessDeniedException {
         return notesService.getById(authentication.getName(),id);
     }
+    @PutMapping("/id/{id}")
+    public NoteResponseDTO updatePost(Authentication authentication
+            ,@PathVariable long id
+            , @RequestBody NoteReqDTO updatedNote) throws AccessDeniedException {
+        return notesService.updatePost(authentication.getName(),id,updatedNote);
+    }
 }

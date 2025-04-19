@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.AccessDeniedException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,6 +106,25 @@ public class NotesService {
                     .build();
         }else{
             throw new AccessDeniedException("Access is denied");
+        }
+    }
+
+    public NoteResponseDTO updatePost(String name, long id, NoteReqDTO updatedNote) throws AccessDeniedException {
+        Note note=notesRepo.findById(id)
+                .orElseThrow(()->new EntityNotFoundException("No entity exists by id: "+id));
+        if(note.getPostedBy().getUsername().equals(name)){
+            note.setContent(updatedNote.getContent());
+            note.setTitle(updatedNote.getTitle());
+            note.setDate(LocalDate.now());
+            Note saved= notesRepo.save(note);
+            return NoteResponseDTO.builder()
+                    .date(saved.getDate())
+                    .title(saved.getTitle())
+                    .id(saved.getId())
+                    .content(saved.getContent())
+                    .build();
+        }else {
+            throw new AccessDeniedException("No access");
         }
     }
 }
