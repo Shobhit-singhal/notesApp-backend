@@ -24,4 +24,8 @@ public class NoteController {
     public NoteResponseDTO addNote(Authentication authentication, @Valid @RequestBody NoteReqDTO note){
         return notesService.addNote(authentication.getName(),note);
     }
+    @GetMapping("/{title}")
+    public List<NoteResponseDTO> findByTitle(Authentication authentication,@PathVariable String title){
+        return notesService.findByTitle(authentication.getName(),title);
+    }
 }

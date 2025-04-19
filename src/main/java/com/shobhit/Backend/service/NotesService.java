@@ -56,4 +56,20 @@ public class NotesService {
                 .date(saved.getDate())
                 .build();
     }
+
+    public List<NoteResponseDTO> findByTitle(String name, String title) {
+        User user=userRepo.findByUsername(name)
+                .orElseThrow(()->new UsernameNotFoundException("Username not found"));
+        List<Note> notes=notesRepo.findByTitleContainingAndPostedBy(title,user)
+                .orElseThrow(()->new UsernameNotFoundException("no such user"));
+        List<NoteResponseDTO> retNotes=new ArrayList<>();
+        for (Note note:notes){
+            retNotes.add(NoteResponseDTO.builder()
+                    .title(note.getTitle())
+                    .date(note.getDate())
+                    .content(note.getContent())
+                    .build());
+        }
+        return retNotes;
+    }
 }
