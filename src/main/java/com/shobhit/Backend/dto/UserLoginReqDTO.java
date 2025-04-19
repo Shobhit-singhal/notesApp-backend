@@ -11,14 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserRequestDTO {
+public class UserLoginReqDTO {
     @NotNull
-    @NotBlank(message = "Username Can't be blank")
+    @NotBlank(message = "username cant be blank")
     private String username;
     @NotNull
-    @NotBlank(message = "Password Can't be blank")
+    @NotBlank(message = "password cant be blank")
     private String password;
-    @NotNull
-    @NotBlank(message = "Gender Can't be blank")
-    private String gender;
 }

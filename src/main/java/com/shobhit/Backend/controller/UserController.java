@@ -1,9 +1,12 @@
 package com.shobhit.Backend.controller;
 
+import com.shobhit.Backend.dto.LoginResponseDto;
+import com.shobhit.Backend.dto.UserLoginReqDTO;
 import com.shobhit.Backend.dto.UserRequestDTO;
 import com.shobhit.Backend.dto.UserResponseDTO;
 import com.shobhit.Backend.entity.User;
 import com.shobhit.Backend.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +20,12 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/register")
-    public UserResponseDTO register(@RequestBody UserRequestDTO user){
+    public UserResponseDTO register(@Valid @RequestBody UserRequestDTO user){
         return userService.register(user);
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody User user){
+    public LoginResponseDto login(@Valid @RequestBody UserLoginReqDTO user){
         return userService.login(user);
 
     }
