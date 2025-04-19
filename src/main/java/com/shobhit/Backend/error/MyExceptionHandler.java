@@ -1,6 +1,8 @@
 package com.shobhit.Backend.error;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.nio.file.AccessDeniedException;
 
 
 @ControllerAdvice
@@ -47,8 +51,13 @@ public class MyExceptionHandler {
     @ExceptionHandler(value = UsernameNotFoundException.class)
     public ResponseEntity<?> handleUsernameNotFound(UsernameNotFoundException ex){
         ErrorMessage errorMessage=ErrorMessage.builder()
-                .message("Username not found").status(HttpStatus.UNAUTHORIZED.value()).build();
+                .message(ex.getMessage()).status(HttpStatus.UNAUTHORIZED.value()).build();
         return new ResponseEntity<>(errorMessage,HttpStatus.UNAUTHORIZED);
+    }
+    @ExceptionHandler(value= EntityNotFoundException.class)
+    public ResponseEntity<?> handleEntityNotFound(EntityNotFoundException ex){
+        ErrorMessage errorMessage=ErrorMessage.builder().message(ex.getMessage()).status(HttpStatus.NOT_FOUND.value()).build();
+        return  new ResponseEntity<>(errorMessage,HttpStatus.NOT_FOUND);
     }
     @ExceptionHandler(value = ExpiredJwtException.class)
     public ResponseEntity<?> handleExpiredJwt(){
@@ -57,5 +66,13 @@ public class MyExceptionHandler {
                 .status(HttpStatus.UNAUTHORIZED.value())
                 .build();
         return new ResponseEntity<>(errorMessage,HttpStatus.UNAUTHORIZED);
+    }
+    @ExceptionHandler(value = AccessDeniedException.class)
+    public ResponseEntity<?> handleAccessDenied(){
+        ErrorMessage errorMessage=ErrorMessage.builder()
+                .message("Access is denied")
+                .status(HttpStatus.FORBIDDEN.value())
+                .build();
+        return  new ResponseEntity<>(errorMessage,HttpStatus.FORBIDDEN);
     }
 }

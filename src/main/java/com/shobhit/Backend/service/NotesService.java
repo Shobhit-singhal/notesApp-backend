@@ -6,6 +6,7 @@ import com.shobhit.Backend.entity.Note;
 import com.shobhit.Backend.entity.User;
 import com.shobhit.Backend.repository.NotesRepo;
 import com.shobhit.Backend.repository.UserRepo;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +33,7 @@ public class NotesService {
         List<NoteResponseDTO> retNotes=new ArrayList<>();
         for (Note note: notes){
             retNotes.add(NoteResponseDTO.builder()
+                    .id(note.getId())
                     .title(note.getTitle())
                     .date(note.getDate())
                     .content(note.getContent())
@@ -51,6 +54,7 @@ public class NotesService {
         user.getNotes().add(saved);
         userRepo.save(user);
         return NoteResponseDTO.builder()
+                .id(saved.getId())
                 .content(saved.getContent())
                 .title(saved.getTitle())
                 .date(saved.getDate())
@@ -65,11 +69,42 @@ public class NotesService {
         List<NoteResponseDTO> retNotes=new ArrayList<>();
         for (Note note:notes){
             retNotes.add(NoteResponseDTO.builder()
+                    .id(note.getId())
                     .title(note.getTitle())
                     .date(note.getDate())
                     .content(note.getContent())
                     .build());
         }
         return retNotes;
+    }
+
+    @Transactional
+    public void deleteNote(String name, long id) throws AccessDeniedException {
+        User user=userRepo.findByUsername(name)
+                .orElseThrow(()->new UsernameNotFoundException("Username not found"));
+        Note note=notesRepo.findById(id).orElseThrow(()->new EntityNotFoundException("Post not found"));
+        if(note.getPostedBy().getUsername().equals(name)){
+            user.getNotes().remove(note);
+            notesRepo.delete(note);
+        }else {
+            throw new AccessDeniedException("You arent authorized to delete it");
+        }
+    }
+
+    public NoteResponseDTO getById(String name, long id) throws AccessDeniedException {
+        Note note=notesRepo.findById(id)
+                .orElseThrow(()-> new EntityNotFoundException("No note exist with id: "+id));
+        System.out.println("hey");
+        if(note.getPostedBy().getUsername().equals(name)){
+            System.out.println("Hey 2");
+            return NoteResponseDTO.builder()
+                    .id(note.getId())
+                    .title(note.getTitle())
+                    .content(note.getContent())
+                    .date(note.getDate())
+                    .build();
+        }else{
+            throw new AccessDeniedException("Access is denied");
+        }
     }
 }

@@ -13,6 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class NoteResponseDTO {
+    private long id;
     private String title;
     private String content;
     private LocalDate date;
