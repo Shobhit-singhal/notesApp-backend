@@ -1,5 +1,6 @@
 package com.shobhit.Backend.error;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +40,7 @@ public class MyExceptionHandler {
     @ExceptionHandler(value = BadCredentialsException.class)
     public ResponseEntity<?> handleBadCredential(BadCredentialsException ex){
         ErrorMessage error= ErrorMessage.builder()
-                .message("Invalid credental").status(HttpStatus.UNAUTHORIZED.value()).build();
+                .message("Invalid credential").status(HttpStatus.UNAUTHORIZED.value()).build();
         return new ResponseEntity<>(error,HttpStatus.UNAUTHORIZED);
     }
 
@@ -47,6 +48,14 @@ public class MyExceptionHandler {
     public ResponseEntity<?> handleUsernameNotFound(UsernameNotFoundException ex){
         ErrorMessage errorMessage=ErrorMessage.builder()
                 .message("Username not found").status(HttpStatus.UNAUTHORIZED.value()).build();
+        return new ResponseEntity<>(errorMessage,HttpStatus.UNAUTHORIZED);
+    }
+    @ExceptionHandler(value = ExpiredJwtException.class)
+    public ResponseEntity<?> handleExpiredJwt(){
+        ErrorMessage errorMessage=ErrorMessage.builder()
+                .message("Jwt token has expired")
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .build();
         return new ResponseEntity<>(errorMessage,HttpStatus.UNAUTHORIZED);
     }
 }
