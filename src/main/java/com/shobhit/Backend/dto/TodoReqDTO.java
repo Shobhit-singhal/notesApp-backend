@@ -18,10 +18,7 @@ public class TodoReqDTO {
     @NotNull
     @NotBlank(message = "task cant be blank")
     private String task;
-    @NotNull
-    @NotBlank(message = "isCompleted cant be blank")
-    private boolean isCompleted;
-    @ManyToOne
-    private User user;
+
+
 
 }

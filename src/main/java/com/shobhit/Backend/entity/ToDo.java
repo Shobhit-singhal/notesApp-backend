@@ -17,9 +17,9 @@ public class ToDo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(unique = true)
+    @Column(nullable = false)
     private String task;
-
+    @Column(nullable = false)
     private boolean isCompleted;
 
     @ManyToOne
