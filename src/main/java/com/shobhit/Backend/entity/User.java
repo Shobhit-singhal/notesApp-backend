@@ -27,4 +27,7 @@ public class User {
 
     @OneToMany(mappedBy = "postedBy",cascade = CascadeType.ALL)
     List<Note> notes=new ArrayList<>();
+
+    @OneToMany (mappedBy = "user",cascade = CascadeType.ALL)
+    private List<ToDo> todos=new ArrayList<>();
 }
