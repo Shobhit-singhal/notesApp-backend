@@ -6,10 +6,12 @@ import com.shobhit.Backend.entity.ToDo;
 import com.shobhit.Backend.entity.User;
 import com.shobhit.Backend.repository.ToDoRepo;
 import com.shobhit.Backend.repository.UserRepo;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,5 +55,28 @@ public class ToDoService {
             );
         }
         return toDoRes;
+    }
+
+    public void delete(String name, long id) throws AccessDeniedException {
+        User user=userRepo.findByUsername(name).orElseThrow(()->new UsernameNotFoundException("No such user exists"));
+        ToDo toDo=toDoRepo.findById(id)
+                .orElseThrow(()->new EntityNotFoundException("No todo with id: "+id));
+        if(toDo.getUser().getUsername().equals(name)){
+            user.getTodos().remove(toDo);
+            toDoRepo.delete(toDo);
+        }else {
+            throw  new AccessDeniedException("You don,t have access to do so");
+        }
+    }
+
+    public void update(String name, long id) throws AccessDeniedException {
+        ToDo toDo=toDoRepo.findById(id)
+                .orElseThrow(()->new EntityNotFoundException("No such entity with id: "+id));
+        if(toDo.getUser().getUsername().equals(name)){
+            toDo.setCompleted(!toDo.isCompleted());
+            toDoRepo.save(toDo);
+        }else {
+            throw new AccessDeniedException("You don't have access to do so");
+        }
     }
 }
