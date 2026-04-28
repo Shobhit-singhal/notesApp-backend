@@ -3,7 +3,7 @@ package com.shobhit.Backend.controller;
 import com.shobhit.Backend.dto.UserResponseDTO;
 import com.shobhit.Backend.entity.User;
 import com.shobhit.Backend.repository.UserRepo;
-import com.shobhit.Backend.service.UserService;
+import com.shobhit.Backend.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +21,7 @@ public class UserController {
     @GetMapping("/info")
     public UserResponseDTO getUserInfo(Authentication authentication){
         System.out.println("hi");
+
         return userService.getUserInfo(authentication.getName());
     }
 }
